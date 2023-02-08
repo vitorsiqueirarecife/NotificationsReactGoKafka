@@ -13,7 +13,7 @@ func main() {
 	connection, _ := connectProducer(brokersUrl)
 
 	app := app.Register(app.Options{
-		Connection: &connection,
+		Connection: connection,
 	})
 	fiber := fiber.New()
 

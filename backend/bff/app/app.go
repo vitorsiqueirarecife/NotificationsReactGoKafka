@@ -6,19 +6,19 @@ import (
 )
 
 type Container struct {
-	Message    message.App
-	Connection *sarama.SyncProducer
+	Message message.App
 }
 
 type Options struct {
-	Connection *sarama.SyncProducer
+	Connection sarama.SyncProducer
 }
 
 func Register(ops Options) *Container {
 
 	container := Container{
-		Message:    message.NewApp(),
-		Connection: ops.Connection,
+		Message: message.NewApp(message.Options{
+			Connection: ops.Connection,
+		}),
 	}
 
 	return &container
