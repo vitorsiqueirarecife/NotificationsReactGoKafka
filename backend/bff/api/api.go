@@ -7,14 +7,14 @@ import (
 )
 
 type Options struct {
-	AppGroup *fiber.App
-	app      *app.Container
+	Fiber *fiber.App
+	App   *app.Container
 }
 
 func Register(opts Options) {
 
-	route := opts.AppGroup.Group("/api/v1")
+	route := opts.Fiber.Group("/api/v1")
 
-	message.NewAPI(&route, opts.app)
+	message.NewAPI(&route, opts.App)
 
 }

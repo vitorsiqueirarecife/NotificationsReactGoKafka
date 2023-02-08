@@ -1,18 +1,21 @@
 package main
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber"
 	"github.com/vitorsiqueirarecife/bff/api"
+	"github.com/vitorsiqueirarecife/bff/app"
 )
 
 func main() {
 
-	app := fiber.New()
+	App := app.Register()
+	Fiber := fiber.New()
 
 	api.Register(api.Options{
-		AppGroup: app,
+		Fiber: Fiber,
+		App:   App,
 	})
 
-	app.Listen(":3000")
+	Fiber.Listen(":3000")
 
 }

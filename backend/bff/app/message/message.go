@@ -1,8 +1,6 @@
 package message
 
 import (
-	"encoding/json"
-
 	"github.com/vitorsiqueirarecife/bff/model"
 )
 
@@ -20,7 +18,7 @@ func NewApp() App {
 
 func (a *appImpl) SendMessage(message *model.Message) error {
 
-	cmtInBytes, err := json.Marshal(message)
+	// cmtInBytes, err := json.Marshal(message)
 
 	return nil
 }
