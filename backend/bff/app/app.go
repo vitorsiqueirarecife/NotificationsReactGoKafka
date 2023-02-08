@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/Shopify/sarama"
 	"github.com/vitorsiqueirarecife/bff/app/message"
+	"github.com/vitorsiqueirarecife/bff/store"
 )
 
 type Container struct {
@@ -11,6 +12,7 @@ type Container struct {
 
 type Options struct {
 	Connection sarama.SyncProducer
+	Store      *store.Container
 }
 
 func Register(ops Options) *Container {
@@ -18,6 +20,7 @@ func Register(ops Options) *Container {
 	container := Container{
 		Message: message.NewApp(message.Options{
 			Connection: ops.Connection,
+			Store:      ops.Store,
 		}),
 	}
 
