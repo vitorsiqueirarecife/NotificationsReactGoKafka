@@ -1,15 +1,20 @@
 package api
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber"
+	"github.com/vitorsiqueirarecife/bff/api/message"
+	"github.com/vitorsiqueirarecife/bff/app"
+)
 
 type Options struct {
 	AppGroup *fiber.App
+	app      *app.Container
 }
 
 func Register(opts Options) {
 
-	api := opts.AppGroup.Group("/api/v1")
+	route := opts.AppGroup.Group("/api/v1")
 
-	api.Post("/comments", nil)
+	message.NewAPI(&route, opts.app)
 
 }
