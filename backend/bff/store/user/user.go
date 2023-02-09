@@ -5,7 +5,8 @@ import (
 )
 
 type Store interface {
-	GetByCategory(category *model.Category, channel *model.Channel) error
+	GetByCategory(list []model.User, categoryId string) []model.User
+	GetByChannel(list []model.User, channelId string) []model.User
 }
 
 type storeImpl struct{}
@@ -15,13 +16,13 @@ func NewApp() Store {
 }
 
 // users mocked (it should be done with consultation to the users microservice)
-func (a *storeImpl) GetByCategory(list []model.User, category *model.Category) []model.User {
+func (a *storeImpl) GetByCategory(list []model.User, categoryId string) []model.User {
 
 	userPerCategory := []model.User{}
 
 	for _, user := range list {
 		for _, s := range user.Subscribed {
-			if s.Id == category.Id {
+			if s.Id == categoryId {
 				userPerCategory = append(userPerCategory, user)
 				break
 			}
@@ -32,13 +33,13 @@ func (a *storeImpl) GetByCategory(list []model.User, category *model.Category) [
 }
 
 // users mocked (it should be done with consultation to the users microservice)
-func (a *storeImpl) GetByChannel(list []model.User, channel *model.Channel) []model.User {
+func (a *storeImpl) GetByChannel(list []model.User, channelId string) []model.User {
 
 	userPerChannel := []model.User{}
 
 	for _, user := range list {
 		for _, c := range user.Channels {
-			if c.Id == channel.Id {
+			if c.Id == channelId {
 				userPerChannel = append(userPerChannel, user)
 				break
 			}
