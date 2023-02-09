@@ -1,6 +1,9 @@
-package mail
+package message
 
 import (
+	"log"
+	"os"
+
 	"github.com/vitorsiqueirarecife/bff/model"
 )
 
@@ -15,5 +18,16 @@ func NewApp() Store {
 }
 
 func (a *storeImpl) Save(message model.Message) error {
+
+	f, err := os.OpenFile("mylogs", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println(message.Text)
+
 	return nil
 }

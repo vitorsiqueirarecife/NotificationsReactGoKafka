@@ -1,15 +1,15 @@
 package store
 
-import "github.com/vitorsiqueirarecife/sender/store/mail"
+import "github.com/vitorsiqueirarecife/sender/store/message"
 
 type Container struct {
-	Mail mail.Store
+	Message message.Store
 }
 
 func Register() *Container {
 
 	container := Container{
-		Mail: mail.NewApp(),
+		Message: message.NewApp(),
 	}
 
 	return &container

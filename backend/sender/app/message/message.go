@@ -1,12 +1,14 @@
 package message
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/Shopify/sarama"
+	"github.com/vitorsiqueirarecife/bff/model"
 	"github.com/vitorsiqueirarecife/sender/store"
 )
 
@@ -43,7 +45,7 @@ func (a *appImpl) Listen() error {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	msgCount := 0
+	count := 0
 
 	doneCh := make(chan struct{})
 	go func() {
@@ -51,9 +53,12 @@ func (a *appImpl) Listen() error {
 			select {
 			case err := <-consumer.Errors():
 				fmt.Println(err)
-			case msg := <-consumer.Messages():
-				msgCount++
-				fmt.Printf("Received message Count %d: | Topic(%s) | Message(%s) \n", msgCount, string(msg.Topic), string(msg.Value))
+			case received := <-consumer.Messages():
+				message := model.Message{}
+				json.Unmarshal(received.Value, &message)
+				a.Store.Message.Save(message)
+				count++
+				fmt.Printf("Received message Count %d: | Topic(%s) | Message(%s) \n", count, string(received.Topic), message.Text)
 			case <-sigchan:
 				fmt.Println("Interrupt is detected")
 				doneCh <- struct{}{}
@@ -62,6 +67,6 @@ func (a *appImpl) Listen() error {
 	}()
 
 	<-doneCh
-	fmt.Println("Processed", msgCount, "messages")
+	fmt.Println("Processed", count, "messages")
 	return nil
 }
