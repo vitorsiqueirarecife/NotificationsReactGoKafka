@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	brokersUrl := []string{"localhost:9092"}
+	brokersUrl := []string{"localhost:3000"}
 	connection, _ := connectProducer(brokersUrl)
 
 	app := app.Register(app.Options{
