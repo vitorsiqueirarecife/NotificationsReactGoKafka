@@ -37,7 +37,6 @@ func (a *appImpl) Send(message *model.Message) error {
 
 	defer a.Connection.Close()
 
-	messageBytes, _ := json.Marshal(message.Text)
 	users := []model.User{}
 	users = a.Store.User.GetByCategory(*mocks.Users, message.CategoryID)
 
@@ -47,7 +46,12 @@ func (a *appImpl) Send(message *model.Message) error {
 
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Sms.Id)
-		if len(users) > 0 {
+		for _, user := range users {
+			messageBytes, _ := json.Marshal(model.Message{
+				CategoryID: message.CategoryID,
+				Text:       message.Text,
+				Target:     user.PhoneNumber,
+			})
 			a.SendTopic(mocks.Sms.Name, messageBytes)
 		}
 		wg.Done()
@@ -55,7 +59,12 @@ func (a *appImpl) Send(message *model.Message) error {
 
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Email.Id)
-		if len(users) > 0 {
+		for _, user := range users {
+			messageBytes, _ := json.Marshal(model.Message{
+				CategoryID: message.CategoryID,
+				Text:       message.Text,
+				Target:     user.Email,
+			})
 			a.SendTopic(mocks.Email.Name, messageBytes)
 		}
 		wg.Done()
@@ -63,7 +72,12 @@ func (a *appImpl) Send(message *model.Message) error {
 
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.PushNotification.Id)
-		if len(users) > 0 {
+		for _, user := range users {
+			messageBytes, _ := json.Marshal(model.Message{
+				CategoryID: message.CategoryID,
+				Text:       message.Text,
+				Target:     user.PhoneNumber,
+			})
 			a.SendTopic(mocks.PushNotification.Name, messageBytes)
 		}
 		wg.Done()
