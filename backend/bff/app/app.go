@@ -17,11 +17,13 @@ type Options struct {
 
 func Register(ops Options) *Container {
 
+	mApp := message.NewApp(message.Options{
+		Connection: ops.Connection,
+		Store:      ops.Store,
+	})
+
 	container := Container{
-		Message: message.NewApp(message.Options{
-			Connection: ops.Connection,
-			Store:      ops.Store,
-		}),
+		Message: mApp,
 	}
 
 	return &container

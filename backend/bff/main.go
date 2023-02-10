@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/vitorsiqueirarecife/bff/api"
 	"github.com/vitorsiqueirarecife/bff/app"
+	"github.com/vitorsiqueirarecife/bff/store"
 )
 
 func main() {
@@ -12,8 +13,11 @@ func main() {
 	brokersUrl := []string{"localhost:3000"}
 	connection, _ := connectProducer(brokersUrl)
 
+	store := store.Register()
+
 	app := app.Register(app.Options{
 		Connection: connection,
+		Store:      store,
 	})
 	fiber := fiber.New()
 

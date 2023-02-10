@@ -12,7 +12,7 @@ type Store interface {
 type storeImpl struct{}
 
 func NewApp() Store {
-	return nil
+	return &storeImpl{}
 }
 
 // users mocked (it should be done with consultation to the users microservice)

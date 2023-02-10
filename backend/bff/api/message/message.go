@@ -24,9 +24,9 @@ func NewAPI(f *fiber.Router, apps *app.Container) {
 
 func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 
-	message := new(model.Message)
+	message := model.Message{}
 
-	if err := c.BodyParser(message); err != nil {
+	if err := c.BodyParser(&message); err != nil {
 		log.Println(err)
 		c.Status(400).JSON(&fiber.Map{
 			"success": false,
@@ -34,13 +34,14 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 		})
 	}
 
-	err := a.apps.Message.Send(message)
+	a.apps.Message.Send(&message)
 
-	err = c.JSON(&fiber.Map{
+	err := c.JSON(&fiber.Map{
 		"success":  true,
 		"message":  "Message send successfully",
 		"messages": message,
 	})
+
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{
 			"success": false,
