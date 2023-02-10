@@ -19,7 +19,7 @@ func NewApp() Store {
 
 func (a *storeImpl) Save(message model.Message) error {
 
-	f, err := os.OpenFile("mylogs", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	f, err := os.OpenFile("MY-LOGS-HERE", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +27,7 @@ func (a *storeImpl) Save(message model.Message) error {
 	defer f.Close()
 
 	log.SetOutput(f)
-	log.Println(message.Text)
+	log.Println(message.CategoryID, message.Target, message.Text)
 
 	return nil
 }

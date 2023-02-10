@@ -13,7 +13,7 @@ import (
 
 type App interface {
 	Send(message model.Message) error
-	SendTopic(bytes []byte) error
+	SendTopic(topic string, bytes []byte) error
 	ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error)
 }
 
@@ -52,7 +52,7 @@ func (a *appImpl) Send(message model.Message) error {
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic(messageBytes)
+			a.SendTopic("sms", messageBytes)
 		}
 		wg.Done()
 	}()
@@ -69,7 +69,7 @@ func (a *appImpl) Send(message model.Message) error {
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic(messageBytes)
+			a.SendTopic("email", messageBytes)
 		}
 		wg.Done()
 	}()
@@ -86,7 +86,7 @@ func (a *appImpl) Send(message model.Message) error {
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic(messageBytes)
+			a.SendTopic("push", messageBytes)
 		}
 		wg.Done()
 	}()
@@ -96,9 +96,7 @@ func (a *appImpl) Send(message model.Message) error {
 	return nil
 }
 
-func (a *appImpl) SendTopic(bytes []byte) error {
-
-	topic := "messages"
+func (a *appImpl) SendTopic(topic string, bytes []byte) error {
 	connection, err := a.ConnectProducer([]string{"localhost:9092"})
 	if err != nil {
 		return err

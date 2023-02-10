@@ -13,7 +13,7 @@ import (
 )
 
 type App interface {
-	Listen() error
+	Listen(topic string) error
 	ConnectConsumer(brokersUrl []string) (sarama.Consumer, error)
 }
 
@@ -31,9 +31,7 @@ func NewApp(opt Options) App {
 	}
 }
 
-func (a *appImpl) Listen() error {
-
-	topic := "messages"
+func (a *appImpl) Listen(topic string) error {
 	connection, err := a.ConnectConsumer([]string{"localhost:9092"})
 	if err != nil {
 		panic(err)
@@ -41,7 +39,7 @@ func (a *appImpl) Listen() error {
 
 	defer connection.Close()
 
-	consumer, err := connection.ConsumePartition(topic, 0, sarama.OffsetOldest)
+	consumer, err := connection.ConsumePartition(topic, 0, sarama.OffsetNewest)
 	if err != nil {
 		return err
 	}
@@ -62,7 +60,7 @@ func (a *appImpl) Listen() error {
 				json.Unmarshal(received.Value, &message)
 				a.Store.Message.Save(message)
 				count++
-				fmt.Printf("Received message Count %d: | Topic(%s) | Message(%s) \n", count, string(received.Topic), message.Text)
+				fmt.Printf("Received message Count %d: Category(%s) | Message(%s) | Message(%s) \n", count, message.CategoryID, message.Text, message.Target)
 			case <-sigchan:
 				fmt.Println("Interrupt is detected")
 				doneCh <- struct{}{}

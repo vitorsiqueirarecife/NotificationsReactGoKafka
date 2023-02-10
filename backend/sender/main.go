@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/vitorsiqueirarecife/sender/app"
 	"github.com/vitorsiqueirarecife/sender/store"
 )
@@ -13,7 +15,7 @@ func main() {
 		Store: store,
 	})
 
-	err := app.Message.Listen()
+	err := app.Message.Listen(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
