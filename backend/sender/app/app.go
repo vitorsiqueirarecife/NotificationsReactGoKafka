@@ -1,7 +1,6 @@
 package app
 
 import (
-	"github.com/Shopify/sarama"
 	"github.com/vitorsiqueirarecife/sender/app/message"
 	"github.com/vitorsiqueirarecife/sender/store"
 )
@@ -11,17 +10,14 @@ type Container struct {
 }
 
 type Options struct {
-	Topic      string
-	Connection sarama.Consumer
-	Store      *store.Container
+	Store *store.Container
 }
 
 func Register(ops Options) *Container {
 
 	container := Container{
 		Message: message.NewApp(message.Options{
-			Connection: ops.Connection,
-			Store:      ops.Store,
+			Store: ops.Store,
 		}),
 	}
 

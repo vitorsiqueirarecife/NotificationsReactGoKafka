@@ -14,7 +14,7 @@ type Store interface {
 type storeImpl struct{}
 
 func NewApp() Store {
-	return nil
+	return &storeImpl{}
 }
 
 func (a *storeImpl) Save(message model.Message) error {

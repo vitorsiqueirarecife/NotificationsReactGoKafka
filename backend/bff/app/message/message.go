@@ -13,7 +13,7 @@ import (
 
 type App interface {
 	Send(message model.Message) error
-	SendTopic(topic string, bytes []byte) error
+	SendTopic(bytes []byte) error
 	ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error)
 }
 
@@ -43,13 +43,13 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Sms.Id)
 		for _, user := range users {
-			fmt.Println("send-sms", user.Name, user.Subscribed, user.Channels)
+			fmt.Println("send-sms", user.Name)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
 				Target:     user.PhoneNumber,
 			})
-			a.SendTopic(mocks.Sms.Name, messageBytes)
+			a.SendTopic(messageBytes)
 		}
 		wg.Done()
 	}()
@@ -57,13 +57,13 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Email.Id)
 		for _, user := range users {
-			fmt.Println("send-email: ", user.Name, user.Subscribed, user.Channels)
+			fmt.Println("send-email: ", user.Name)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
 				Target:     user.Email,
 			})
-			a.SendTopic(mocks.Email.Name, messageBytes)
+			a.SendTopic(messageBytes)
 		}
 		wg.Done()
 	}()
@@ -71,13 +71,13 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.PushNotification.Id)
 		for _, user := range users {
-			fmt.Println("send-push-notification", user.Name, user.Subscribed, user.Channels)
+			fmt.Println("send-push-notification", user.Name)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
 				Target:     user.PhoneNumber,
 			})
-			a.SendTopic(mocks.PushNotification.Name, messageBytes)
+			a.SendTopic(messageBytes)
 		}
 		wg.Done()
 	}()
@@ -87,8 +87,9 @@ func (a *appImpl) Send(message model.Message) error {
 	return nil
 }
 
-func (a *appImpl) SendTopic(topic string, bytes []byte) error {
+func (a *appImpl) SendTopic(bytes []byte) error {
 
+	topic := "messages"
 	connection, err := a.ConnectProducer([]string{"localhost:3000"})
 	if err != nil {
 		return err
@@ -101,6 +102,7 @@ func (a *appImpl) SendTopic(topic string, bytes []byte) error {
 		Value: sarama.StringEncoder(bytes),
 	})
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

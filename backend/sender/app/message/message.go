@@ -14,30 +14,34 @@ import (
 
 type App interface {
 	Listen() error
+	ConnectConsumer(brokersUrl []string) (sarama.Consumer, error)
 }
 
 type appImpl struct {
-	Connection sarama.Consumer
-	Store      *store.Container
-	Topic      string
+	Store *store.Container
 }
 
 type Options struct {
-	Connection sarama.Consumer
-	Store      *store.Container
-	Topic      string
+	Store *store.Container
 }
 
 func NewApp(opt Options) App {
 	return &appImpl{
-		Topic:      opt.Topic,
-		Connection: opt.Connection,
-		Store:      opt.Store,
+		Store: opt.Store,
 	}
 }
 
 func (a *appImpl) Listen() error {
-	consumer, err := a.Connection.ConsumePartition(a.Topic, 0, sarama.OffsetOldest)
+
+	topic := "messages"
+	connection, err := a.ConnectConsumer([]string{"localhost:9092"})
+	if err != nil {
+		panic(err)
+	}
+
+	defer connection.Close()
+
+	consumer, err := connection.ConsumePartition(topic, 0, sarama.OffsetOldest)
 	if err != nil {
 		return err
 	}
@@ -69,4 +73,15 @@ func (a *appImpl) Listen() error {
 	<-doneCh
 	fmt.Println("Processed", count, "messages")
 	return nil
+}
+
+func (a *appImpl) ConnectConsumer(brokersUrl []string) (sarama.Consumer, error) {
+	config := sarama.NewConfig()
+	config.Consumer.Return.Errors = true
+	conn, err := sarama.NewConsumer(brokersUrl, config)
+	if err != nil {
+		return nil, err
+	}
+
+	return conn, nil
 }

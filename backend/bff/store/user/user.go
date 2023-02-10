@@ -24,7 +24,6 @@ func (a *storeImpl) GetByCategory(list []model.User, categoryId string) []model.
 		for _, s := range user.Subscribed {
 			if s.Id == categoryId {
 				userPerCategory = append(userPerCategory, user)
-				break
 			}
 		}
 	}
@@ -41,7 +40,6 @@ func (a *storeImpl) GetByChannel(list []model.User, channelId string) []model.Us
 		for _, c := range user.Channels {
 			if c.Id == channelId {
 				userPerChannel = append(userPerChannel, user)
-				break
 			}
 		}
 	}
