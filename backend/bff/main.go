@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Shopify/sarama"
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/vitorsiqueirarecife/bff/api"
 	"github.com/vitorsiqueirarecife/bff/app"
 )

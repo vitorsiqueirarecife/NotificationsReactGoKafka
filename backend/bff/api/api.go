@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/vitorsiqueirarecife/bff/api/message"
 	"github.com/vitorsiqueirarecife/bff/app"
 )

@@ -3,7 +3,7 @@ package message
 import (
 	"log"
 
-	"github.com/gofiber/fiber"
+	"github.com/gofiber/fiber/v2"
 	"github.com/vitorsiqueirarecife/bff/app"
 	"github.com/vitorsiqueirarecife/bff/model"
 )
@@ -22,7 +22,7 @@ func NewAPI(f *fiber.Router, apps *app.Container) {
 	api.fi.Post("/send-message", api.SendMessage)
 }
 
-func (a *apiImpl) SendMessage(c *fiber.Ctx) {
+func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 
 	message := new(model.Message)
 
@@ -47,4 +47,6 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) {
 			"message": "Error creating product",
 		})
 	}
+
+	return nil
 }
