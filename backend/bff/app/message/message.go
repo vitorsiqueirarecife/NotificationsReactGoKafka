@@ -12,30 +12,26 @@ import (
 )
 
 type App interface {
-	Send(message *model.Message) error
+	Send(message model.Message) error
 	SendTopic(topic string, bytes []byte) error
+	ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error)
 }
 
 type appImpl struct {
-	Connection sarama.SyncProducer
-	Store      *store.Container
+	Store *store.Container
 }
 
 type Options struct {
-	Connection sarama.SyncProducer
-	Store      *store.Container
+	Store *store.Container
 }
 
 func NewApp(opt Options) App {
 	return &appImpl{
-		Connection: opt.Connection,
-		Store:      opt.Store,
+		Store: opt.Store,
 	}
 }
 
-func (a *appImpl) Send(message *model.Message) error {
-
-	defer a.Connection.Close()
+func (a *appImpl) Send(message model.Message) error {
 
 	users := []model.User{}
 	users = a.Store.User.GetByCategory(*mocks.Users, message.CategoryID)
@@ -90,7 +86,14 @@ func (a *appImpl) Send(message *model.Message) error {
 
 func (a *appImpl) SendTopic(topic string, bytes []byte) error {
 
-	partition, offset, err := a.Connection.SendMessage(&sarama.ProducerMessage{
+	connection, err := a.ConnectProducer([]string{"localhost:3000"})
+	if err != nil {
+		return err
+	}
+
+	defer connection.Close()
+
+	partition, offset, err := connection.SendMessage(&sarama.ProducerMessage{
 		Topic: topic,
 		Value: sarama.StringEncoder(bytes),
 	})
@@ -101,4 +104,19 @@ func (a *appImpl) SendTopic(topic string, bytes []byte) error {
 	fmt.Printf("Sent to topic (%s)/partition(%d)/offset(%d)\n", topic, partition, offset)
 
 	return nil
+}
+
+func (a *appImpl) ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error) {
+
+	config := sarama.NewConfig()
+	config.Producer.Return.Successes = true
+	config.Producer.RequiredAcks = sarama.WaitForAll
+	config.Producer.Retry.Max = 5
+
+	conn, err := sarama.NewSyncProducer(brokersUrl, config)
+	if err != nil {
+		return nil, err
+	}
+
+	return conn, nil
 }

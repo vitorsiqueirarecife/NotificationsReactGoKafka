@@ -34,7 +34,7 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 		})
 	}
 
-	a.apps.Message.Send(&message)
+	a.apps.Message.Send(message)
 
 	err := c.JSON(&fiber.Map{
 		"success":  true,
