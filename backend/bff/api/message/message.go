@@ -34,13 +34,7 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 		})
 	}
 
-	a.apps.Message.Send(message)
-
-	err := c.JSON(&fiber.Map{
-		"success":  true,
-		"message":  "Message send successfully",
-		"messages": message,
-	})
+	err := a.apps.Message.Send(message)
 
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{
@@ -48,6 +42,12 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 			"message": "Error creating product",
 		})
 	}
+
+	c.JSON(&fiber.Map{
+		"success":  true,
+		"message":  "Message send successfully",
+		"messages": message,
+	})
 
 	return nil
 }

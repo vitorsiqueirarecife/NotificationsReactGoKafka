@@ -43,6 +43,7 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Sms.Id)
 		for _, user := range users {
+			fmt.Println("send-sms", user.Name, user.Subscribed, user.Channels)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
@@ -56,6 +57,7 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Email.Id)
 		for _, user := range users {
+			fmt.Println("send-email: ", user.Name, user.Subscribed, user.Channels)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
@@ -69,6 +71,7 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.PushNotification.Id)
 		for _, user := range users {
+			fmt.Println("send-push-notification", user.Name, user.Subscribed, user.Channels)
 			messageBytes, _ := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
