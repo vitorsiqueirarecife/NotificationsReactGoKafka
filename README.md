@@ -4,6 +4,8 @@ Example messaging system using react js, golang, docker and kafka. The system's 
 
 The architecture uses kafka as a messaging system, receiving messages from BFF(API) in 3 topics that are read by 3 different services (SMS, EMAIL and PUSH NOTIFICATION).
 
+The frontend uses react, react hook forms, react query, styled components and styled systems.
+
 Open 5 terminals and
 - run in ./backend: docker-compose up
 - run in ./backend/bff: go run main.go
