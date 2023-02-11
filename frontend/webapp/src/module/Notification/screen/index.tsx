@@ -18,7 +18,7 @@ function NotificationScreen() {
     },
   });
 
-  const { mutate } = useNotification({    
+  const { mutate, isLoading } = useNotification({    
     onSuccess: (data) => {
       alert(data.message);
     },
@@ -27,8 +27,10 @@ function NotificationScreen() {
     }
   });
 
-  const onSubmit = (data: FormNotification) => {
-    mutate(data);
+  const onSubmit = (data: FormNotification) => {    
+    if(!isLoading){
+      mutate(data);
+    }
   };
 
   return (
@@ -44,24 +46,18 @@ function NotificationScreen() {
         <Controller
           name="category_id"
           control={control}
-          rules={{ required: true }}
+          rules={{ min: 1, max: 3, required: true }}
           render={({ field }) => (
             <Box marginY="20px">
-              <Select                     
+              <Select             
+                borderColor={errors?.category_id ? 'red' : undefined}        
                 {...field}
               >
-                <Option>Select the category</Option>
+                <Option value="0">Select the category</Option>
                 <Option value="1">Sports</Option>
                 <Option value="2">Finance</Option>
                 <Option value="3">Movies</Option>
-              </Select>
-
-              {
-              errors.category_id?.message && 
-                <Box padding="10px">
-                  {errors.text?.message}
-                </Box>
-              }
+              </Select>             
             </Box>
           )}
         />
@@ -75,6 +71,7 @@ function NotificationScreen() {
               <Textarea
                 placeholder="enter the text"                
                 rows={5}
+                borderColor={errors?.text ? 'red' : undefined}
                 {...field}
               />
 
@@ -89,7 +86,7 @@ function NotificationScreen() {
         />
 
         <Box display="flex" justifyContent="flex-end" width="100%">
-          <Button type="submit">Send</Button>
+          <Button type="submit" >Send</Button>
         </Box>
       </Form>
     </Box>
