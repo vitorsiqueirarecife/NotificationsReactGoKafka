@@ -5,12 +5,13 @@ import { SelectProps } from './types';
 export const Select = styled.select<SelectProps>`
   ${border}
   display: block;
-  border-radius: 10px;
+  border-radius: 6px;
   margin: 0;
   background: none;
   width: 100%;
-  padding: 22px;
-  color: green;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  color: black;
   font-size: 18px;
   font-weight: 500px;
 `;

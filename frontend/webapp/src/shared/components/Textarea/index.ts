@@ -5,12 +5,13 @@ import { InputBaseProps } from './types';
 export const Textarea = styled.textarea<InputBaseProps>`
   ${border}
   display: block;
-  border-radius: 10px;
+  border-radius: 6px;
   margin: 0;
   background: none;
+  padding-top: 4px;
+  padding-bottom: 4px;
   width: 100%;
-  padding: 22px;
-  color: green;
+  color: black;
   font-size: 18px;
   font-weight: 500px;
 `;

@@ -32,7 +32,7 @@ function NotificationScreen() {
   return (
     <Box
       padding={40}
-      backgroundColor="red"
+      backgroundColor="#F5F5F5"
     >
       <Box>
         <Typography>Sending Notifications</Typography>
