@@ -2,17 +2,17 @@ import Box from "../../../shared/components/Box";
 import { Form } from "../../../shared/components/Form";
 import Typography from "../../../shared/components/Typography/indes";
 import { useForm } from "react-hook-form";
-import { FormData } from './types';
+import { FormNotification } from './types';
 
 function NotificationScreen() {
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormNotification>({
     defaultValues: {
       category_id: '',
       text: ''
     },
   });
-  const onSubmit = (data: FormData) => console.log(data);
+  const onSubmit = (data: FormNotification) => console.log(data);
 
   console.log(watch("category_id"));
   console.log(watch("text"));

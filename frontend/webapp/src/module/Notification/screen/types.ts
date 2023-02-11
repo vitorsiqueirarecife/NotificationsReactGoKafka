@@ -1,4 +1,4 @@
-export interface FormData {
+export interface FormNotification {
     category_id: string;
     text: string;
   }
