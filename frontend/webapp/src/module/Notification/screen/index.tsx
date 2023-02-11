@@ -2,14 +2,20 @@ import Box from "../../../shared/components/Box";
 import { Form } from "../../../shared/components/Form";
 import Typography from "../../../shared/components/Typography/indes";
 import { useForm } from "react-hook-form";
+import { FormData } from './types';
 
 function NotificationScreen() {
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>({
+    defaultValues: {
+      category_id: '',
+      text: ''
+    },
+  });
+  const onSubmit = (data: FormData) => console.log(data);
 
-  console.log(watch("example")); // watch input value by passing the name of it
-
+  console.log(watch("category_id"));
+  console.log(watch("text"));
 
   return (
     <Box
@@ -19,11 +25,7 @@ function NotificationScreen() {
       <Box>
         <Typography>Sending Notifications</Typography>
       </Box>
-      <Form onSubmit={handleSubmit(onSubmit)}>      
-        <input defaultValue="test" {...register("example")} />
-        <input {...register("exampleRequired", { required: true })} />
-        {errors.exampleRequired && <span>This field is required</span>}      
-        <input type="submit" />    
+      <Form onSubmit={handleSubmit(onSubmit)}>              
       </Form>
     </Box>
   );
