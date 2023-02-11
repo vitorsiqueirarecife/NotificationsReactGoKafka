@@ -29,7 +29,6 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 	if err := c.BodyParser(&message); err != nil {
 		log.Println(err)
 		c.Status(400).JSON(&fiber.Map{
-			"success": false,
 			"message": err,
 		})
 	}
@@ -38,13 +37,11 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{
-			"success": false,
 			"message": "Error creating product",
 		})
 	}
 
 	c.JSON(&fiber.Map{
-		"success": true,
 		"message": "Message send successfully",
 	})
 

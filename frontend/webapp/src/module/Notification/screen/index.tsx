@@ -20,7 +20,7 @@ function NotificationScreen() {
 
   const { mutate } = useNotification({    
     onSuccess: (data) => {
-      alert(data.data);
+      alert(data.message);
     },
     onError:(e) =>{
       alert(e.message)
