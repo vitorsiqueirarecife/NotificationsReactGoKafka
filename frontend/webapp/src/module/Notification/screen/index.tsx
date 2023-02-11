@@ -7,6 +7,7 @@ import { useNotification } from "../services";
 import { Textarea } from "../../../shared/components/Textarea";
 import { Select } from "../../../shared/components/Select";
 import Button from "../../../shared/components/Button";
+import { Option } from "../../../shared/components/Option";
 
 function NotificationScreen() {
 
@@ -33,7 +34,7 @@ function NotificationScreen() {
   return (
     <Box
       padding={40}
-      backgroundColor="#F5F5F5"
+      backgroundColor="#F5F5F5"      
     >
       <Box>
         <Typography>Sending Notifications</Typography>
@@ -46,13 +47,17 @@ function NotificationScreen() {
           rules={{ required: true }}
           render={({ field }) => (
             <Box marginY="20px">
-              <Select
-                title="Select the category"                
+              <Select                     
                 {...field}
-              />
+              >
+                <Option>Select the category</Option>
+                <Option value="1">Sports</Option>
+                <Option value="2">Finance</Option>
+                <Option value="3">Movies</Option>
+              </Select>
 
               {
-              errors.text?.message && 
+              errors.category_id?.message && 
                 <Box padding="10px">
                   {errors.text?.message}
                 </Box>
@@ -68,7 +73,7 @@ function NotificationScreen() {
           render={({ field }) => (
             <Box marginY="20px">
               <Textarea
-                title="enter the text"
+                placeholder="enter the text"                
                 rows={5}
                 {...field}
               />
