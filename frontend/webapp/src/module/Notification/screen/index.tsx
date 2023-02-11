@@ -6,6 +6,7 @@ import { FormNotification } from './types';
 import { useNotification } from "../services";
 import { Textarea } from "../../../shared/components/Textarea";
 import { Select } from "../../../shared/components/Select";
+import Button from "../../../shared/components/Button";
 
 function NotificationScreen() {
 
@@ -82,6 +83,9 @@ function NotificationScreen() {
           )}
         />
 
+        <Box display="flex" justifyContent="flex-end" width="100%">
+          <Button type="submit">Send</Button>
+        </Box>
       </Form>
     </Box>
   );
