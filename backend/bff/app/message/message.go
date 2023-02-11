@@ -13,7 +13,7 @@ import (
 
 type App interface {
 	Send(message model.Message) error
-	SendTopic(topic string, bytes []byte) error
+	SendTopic(topic string, message model.Message, user model.User) error
 	ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error)
 }
 
@@ -43,19 +43,9 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Sms.Id)
 		for _, user := range users {
-			fmt.Println("send-sms", user.Name)
-			messageBytes, err := json.Marshal(model.Message{
-				CategoryID: message.CategoryID,
-				Text:       message.Text,
-				User:       user,
-			})
+			err := a.SendTopic("sms", message, user)
 			if err != nil {
 				fmt.Println(err)
-			}
-			err = a.SendTopic("sms", messageBytes)
-			if err != nil {
-				fmt.Println(err)
-				wg.Done()
 			}
 		}
 		wg.Done()
@@ -64,19 +54,9 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Email.Id)
 		for _, user := range users {
-			fmt.Println("send-email", user.Name)
-			messageBytes, err := json.Marshal(model.Message{
-				CategoryID: message.CategoryID,
-				Text:       message.Text,
-				User:       user,
-			})
+			err := a.SendTopic("email", message, user)
 			if err != nil {
 				fmt.Println(err)
-			}
-			err = a.SendTopic("email", messageBytes)
-			if err != nil {
-				fmt.Println(err)
-				wg.Done()
 			}
 		}
 		wg.Done()
@@ -85,19 +65,9 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.PushNotification.Id)
 		for _, user := range users {
-			fmt.Println("send-push-notification", user.Name)
-			messageBytes, err := json.Marshal(model.Message{
-				CategoryID: message.CategoryID,
-				Text:       message.Text,
-				User:       user,
-			})
+			err := a.SendTopic("push", message, user)
 			if err != nil {
 				fmt.Println(err)
-			}
-			err = a.SendTopic("push", messageBytes)
-			if err != nil {
-				fmt.Println(err)
-				wg.Done()
 			}
 		}
 		wg.Done()
@@ -108,13 +78,22 @@ func (a *appImpl) Send(message model.Message) error {
 	return nil
 }
 
-func (a *appImpl) SendTopic(topic string, bytes []byte) error {
+func (a *appImpl) SendTopic(topic string, message model.Message, user model.User) error {
 	connection, err := a.ConnectProducer([]string{"localhost:9092"})
 	if err != nil {
 		return err
 	}
 
 	defer connection.Close()
+
+	bytes, err := json.Marshal(model.Message{
+		CategoryID: message.CategoryID,
+		Text:       message.Text,
+		User:       user,
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	_, _, err = connection.SendMessage(&sarama.ProducerMessage{
 		Topic: topic,

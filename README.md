@@ -7,3 +7,5 @@ Open 5 terminals and
 - run in ./backend/sender: : go run main.go email
 - run in ./backend/sender: : go run main.go push
 - run in ./frontend/webapp: npm run start
+
+The logs are: ./backend/sender/logs/

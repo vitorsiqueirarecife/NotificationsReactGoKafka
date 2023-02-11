@@ -58,9 +58,10 @@ func (a *appImpl) Listen(topic string) error {
 			case received := <-consumer.Messages():
 				message := model.Message{}
 				json.Unmarshal(received.Value, &message)
-				a.Store.Message.Save(message)
+				logMessage := fmt.Sprintf("Category(%s) | Message(%s) | To(%s)", message.CategoryID, message.Text, message.User.Name)
+				a.Store.Message.Save(message, logMessage, topic)
 				count++
-				fmt.Printf("Received message Count %d: Category(%s) | Message(%s) | Message(%s) \n", count, message.CategoryID, message.Text, message.User.Name)
+				fmt.Println(logMessage)
 			case <-sigchan:
 				fmt.Println("Interrupt is detected")
 				doneCh <- struct{}{}

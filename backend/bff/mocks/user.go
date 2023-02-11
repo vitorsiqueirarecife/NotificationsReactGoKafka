@@ -31,7 +31,7 @@ var lucas = model.User{
 
 var diego = model.User{
 	Id:          "4",
-	Name:        "diego",
+	Name:        "Diego",
 	Email:       "diego@gmail.com",
 	PhoneNumber: "558199813911",
 	Subscribed:  []model.Category{Finance},
@@ -40,7 +40,7 @@ var diego = model.User{
 
 var mario = model.User{
 	Id:          "5",
-	Name:        "mario",
+	Name:        "Mario",
 	Email:       "mario@gmail.com",
 	PhoneNumber: "558199813912",
 	Subscribed:  []model.Category{Movies, Finance, Sports},
@@ -49,7 +49,7 @@ var mario = model.User{
 
 var joao = model.User{
 	Id:          "6",
-	Name:        "joao",
+	Name:        "Joao",
 	Email:       "joao@gmail.com",
 	PhoneNumber: "558199813913",
 	Subscribed:  []model.Category{Movies, Sports},
