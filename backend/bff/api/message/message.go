@@ -44,9 +44,8 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 	}
 
 	c.JSON(&fiber.Map{
-		"success":  true,
-		"message":  "Message send successfully",
-		"messages": message,
+		"success": true,
+		"message": "Message send successfully",
 	})
 
 	return nil
