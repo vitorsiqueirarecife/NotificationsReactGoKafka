@@ -3,19 +3,29 @@ import { Form } from "../../../shared/components/Form";
 import Typography from "../../../shared/components/Typography/indes";
 import { useForm } from "react-hook-form";
 import { FormNotification } from './types';
+import { useNotification } from "../services";
 
 function NotificationScreen() {
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormNotification>({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormNotification>({
     defaultValues: {
       category_id: '',
       text: ''
     },
   });
-  const onSubmit = (data: FormNotification) => console.log(data);
 
-  console.log(watch("category_id"));
-  console.log(watch("text"));
+  const { mutate } = useNotification({
+    onSuccess: (data) => {
+      alert(data.data);
+    },
+    onError:(e) =>{
+      alert(e.message)
+    }
+  });
+
+  const onSubmit = (data: FormNotification) => {
+    mutate(data);
+  };
 
   return (
     <Box
