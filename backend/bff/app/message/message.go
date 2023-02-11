@@ -47,12 +47,16 @@ func (a *appImpl) Send(message model.Message) error {
 			messageBytes, err := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
-				Target:     user.PhoneNumber,
+				User:       user,
 			})
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic("sms", messageBytes)
+			err = a.SendTopic("sms", messageBytes)
+			if err != nil {
+				fmt.Println(err)
+				wg.Done()
+			}
 		}
 		wg.Done()
 	}()
@@ -60,16 +64,20 @@ func (a *appImpl) Send(message model.Message) error {
 	go func() {
 		users = a.Store.User.GetByChannel(users, mocks.Email.Id)
 		for _, user := range users {
-			fmt.Println("send-email: ", user.Name)
+			fmt.Println("send-email", user.Name)
 			messageBytes, err := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
-				Target:     user.Email,
+				User:       user,
 			})
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic("email", messageBytes)
+			err = a.SendTopic("email", messageBytes)
+			if err != nil {
+				fmt.Println(err)
+				wg.Done()
+			}
 		}
 		wg.Done()
 	}()
@@ -81,12 +89,16 @@ func (a *appImpl) Send(message model.Message) error {
 			messageBytes, err := json.Marshal(model.Message{
 				CategoryID: message.CategoryID,
 				Text:       message.Text,
-				Target:     user.PhoneNumber,
+				User:       user,
 			})
 			if err != nil {
 				fmt.Println(err)
 			}
-			a.SendTopic("push", messageBytes)
+			err = a.SendTopic("push", messageBytes)
+			if err != nil {
+				fmt.Println(err)
+				wg.Done()
+			}
 		}
 		wg.Done()
 	}()
@@ -110,6 +122,7 @@ func (a *appImpl) SendTopic(topic string, bytes []byte) error {
 	})
 
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

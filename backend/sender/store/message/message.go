@@ -27,7 +27,7 @@ func (a *storeImpl) Save(message model.Message) error {
 	defer f.Close()
 
 	log.SetOutput(f)
-	log.Println(message.CategoryID, message.Target, message.Text)
+	log.Println(message.CategoryID, message.User.Name, message.Text)
 
 	return nil
 }

@@ -60,7 +60,7 @@ func (a *appImpl) Listen(topic string) error {
 				json.Unmarshal(received.Value, &message)
 				a.Store.Message.Save(message)
 				count++
-				fmt.Printf("Received message Count %d: Category(%s) | Message(%s) | Message(%s) \n", count, message.CategoryID, message.Text, message.Target)
+				fmt.Printf("Received message Count %d: Category(%s) | Message(%s) | Message(%s) \n", count, message.CategoryID, message.Text, message.User.Name)
 			case <-sigchan:
 				fmt.Println("Interrupt is detected")
 				doneCh <- struct{}{}
