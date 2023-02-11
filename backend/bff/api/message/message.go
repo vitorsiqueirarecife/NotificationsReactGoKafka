@@ -37,7 +37,7 @@ func (a *apiImpl) SendMessage(c *fiber.Ctx) error {
 
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{
-			"message": "Error creating product",
+			"message": "Error sending the messages",
 		})
 	}
 
