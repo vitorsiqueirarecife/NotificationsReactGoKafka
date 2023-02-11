@@ -7,7 +7,7 @@ export const Select = styled.select<SelectProps>`
   display: block;
   border-radius: 6px;
   margin: 0;
-  background: none;
+  background: #fff;
   width: 100%;
   padding-top: 4px;
   padding-bottom: 4px;
