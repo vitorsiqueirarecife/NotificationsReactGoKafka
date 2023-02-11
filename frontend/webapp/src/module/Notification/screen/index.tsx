@@ -5,6 +5,7 @@ import { useForm, Controller  } from "react-hook-form";
 import { FormNotification } from './types';
 import { useNotification } from "../services";
 import { Textarea } from "../../../shared/components/Textarea";
+import { Select } from "../../../shared/components/Select";
 
 function NotificationScreen() {
 
@@ -39,20 +40,44 @@ function NotificationScreen() {
       <Form onSubmit={handleSubmit(onSubmit)}>
 
         <Controller
+          name="category_id"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <Box marginY="20px">
+              <Select
+                title="Select the category"                
+                {...field}
+              />
+
+              {
+              errors.text?.message && 
+                <Box padding="10px">
+                  {errors.text?.message}
+                </Box>
+              }
+            </Box>
+          )}
+        />
+
+        <Controller
           name="text"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
             <Box marginY="20px">
               <Textarea
-                title="select the category"
+                title="enter the text"
                 rows={5}
                 {...field}
               />
 
-              {errors.text?.message && <Box padding="10px">
-                {errors.text?.message}
-              </Box>}
+              {
+              errors.text?.message && 
+                <Box padding="10px">
+                  {errors.text?.message}
+                </Box>
+              }
             </Box>
           )}
         />
