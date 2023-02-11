@@ -1,20 +1,21 @@
 import Box from "../../../shared/components/Box";
 import { Form } from "../../../shared/components/Form";
 import Typography from "../../../shared/components/Typography/indes";
-import { useForm } from "react-hook-form";
+import { useForm, Controller  } from "react-hook-form";
 import { FormNotification } from './types';
 import { useNotification } from "../services";
+import { Textarea } from "../../../shared/components/Textarea";
 
 function NotificationScreen() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormNotification>({
+  const { control, handleSubmit, formState: { errors } } = useForm<FormNotification>({
     defaultValues: {
       category_id: '',
       text: ''
     },
   });
 
-  const { mutate } = useNotification({
+  const { mutate } = useNotification({    
     onSuccess: (data) => {
       alert(data.data);
     },
@@ -35,7 +36,27 @@ function NotificationScreen() {
       <Box>
         <Typography>Sending Notifications</Typography>
       </Box>
-      <Form onSubmit={handleSubmit(onSubmit)}>              
+      <Form onSubmit={handleSubmit(onSubmit)}>
+
+        <Controller
+          name="text"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <Box marginY="20px">
+              <Textarea
+                title="select the category"
+                rows={5}
+                {...field}
+              />
+
+              {errors.text?.message && <Box padding="10px">
+                {errors.text?.message}
+              </Box>}
+            </Box>
+          )}
+        />
+
       </Form>
     </Box>
   );

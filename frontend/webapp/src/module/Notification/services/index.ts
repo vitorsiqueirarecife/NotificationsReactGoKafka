@@ -1,5 +1,4 @@
-import { UseMutationOptions } from '@tanstack/react-query';
-import { useMutation } from '@tanstack/react-query/build/lib/useMutation';
+import { UseMutationOptions,useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import apiV1 from '../../../shared/config/axios';
 import { FormNotification } from '../screen/types';
