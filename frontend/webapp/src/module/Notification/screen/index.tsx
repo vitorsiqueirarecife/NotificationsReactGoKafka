@@ -39,7 +39,7 @@ function NotificationScreen() {
       backgroundColor="#F5F5F5"      
     >
       <Box>
-        <Typography>Sending Notifications</Typography>
+        <Typography>Send Notifications</Typography>
       </Box>
       <Form onSubmit={handleSubmit(onSubmit)}>
 
