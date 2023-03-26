@@ -44,7 +44,6 @@ services:
       - broker
       - zookeeper
     environment:
-      CGO_ENABLED: "0"
       KAFKA_BROKERS: kafka:9092
       KAFKA_TOPIC: sms
       
