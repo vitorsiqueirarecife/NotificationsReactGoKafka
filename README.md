@@ -1,4 +1,4 @@
-# NotificationsReactGoKafka
+# Notifications -> React -> Go -> Kafka
 
 Example messaging system using react js, golang, docker and kafka. The system's proposal is to simulate the sending of notifications based on categories selected by the user.
 
